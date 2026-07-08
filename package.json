@@ -1,6 +1,6 @@
 {
   "name": "@upland/shared",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules — apps update deliberately by bumping their pin.",
   "private": true,
   "main": "dist/index.js",
@@ -15,7 +15,11 @@
       "default": "./dist/timing.js"
     }
   },
-  "files": ["dist", "src", "README.md"],
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "tsc --noEmit && node --test --import tsx test/*.test.ts",

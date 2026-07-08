@@ -8,6 +8,7 @@ import {
   TIMING_CALIB,
   resampleTiming,
   expectedBurn,
+  expectedRate,
   interpTiming,
 } from "../src/timing";
 
@@ -18,17 +19,28 @@ test("templates are 9 steps summing to 100", () => {
   }
 });
 
-test("derived values match the 2026-07-07 8-project calibration", () => {
+test("derived values match the 2026-07-07 8-project calibration (smoothed)", () => {
   // Guards against accidental data edits — update alongside TIMING_VERSION
   // when deliberately recalibrating.
   assert.equal(STD_SPLIT, 51);
   assert.equal(TIMING_CALIB.length, 8);
-  assert.ok(Math.abs(TIMING_DESIGN[0] - 6.0) < 0.1);
-  assert.ok(Math.abs(TIMING_FAB[8] - 30.4) < 0.1);
+  assert.ok(Math.abs(TIMING_DESIGN[0] - 6.55) < 0.1);
+  assert.ok(Math.abs(TIMING_FAB[8] - 29.61) < 0.1);
 });
 
 test("fab crests at the install month", () => {
   assert.equal(Math.max(...TIMING_FAB), TIMING_FAB[8]);
+});
+
+test("interpolated densities stay non-negative and expectedRate integrates to 1", () => {
+  let area = 0;
+  const N = 1000;
+  for (let i = 0; i <= N; i++) {
+    assert.ok(interpTiming(TIMING_DESIGN, i / N) >= 0);
+    assert.ok(interpTiming(TIMING_FAB, i / N) >= 0);
+    if (i < N) area += (expectedRate(i / N, null) + expectedRate((i + 1) / N, null)) / 2 / N;
+  }
+  assert.ok(Math.abs(area - 1) < 1e-3);
 });
 
 test("resampleTiming normalises to 1 for any length", () => {

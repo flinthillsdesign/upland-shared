@@ -20,7 +20,7 @@
 // Bumped whenever TIMING_PROJECTS (and therefore the derived templates)
 // changes. Stamped into ODIN retros so a frozen snapshot records which
 // model it was judged against.
-export const TIMING_VERSION = "2026-07-07.8proj";
+export const TIMING_VERSION = "2026-07-07.8proj-smooth";
 
 // ── Calibration projects (ODIN Toggl; method on the scheduler's Project
 // Shape page). window: sustained-work start → INSTALL month, so step 9 =
@@ -166,11 +166,26 @@ function timingTemplate(projs: TimingProject[], key: "d9" | "f9"): number[] {
   return acc.map((v) => (100 * v) / sum);
 }
 
+// One binomial (1-2-1) pass over the 9 steps, renormalised to sum 100. The
+// step averages of eight projects still carry sampling noise; the model
+// should present the underlying rhythm, not the noise. Edge steps reuse
+// their own value for the missing neighbour, which keeps the install crest
+// at the final step.
+function smoothTemplate(tpl: number[]): number[] {
+  const s = tpl.map(
+    (v, i) => (tpl[Math.max(0, i - 1)] + 2 * v + tpl[Math.min(tpl.length - 1, i + 1)]) / 4,
+  );
+  const sum = s.reduce((a, b) => a + b, 0);
+  return s.map((v) => (100 * v) / sum);
+}
+
 export const TIMING_CALIB = TIMING_PROJECTS.filter((p) => p.calib !== false);
-export const TIMING_DESIGN = timingTemplate(TIMING_CALIB, "d9");
-export const TIMING_FAB = timingTemplate(
-  TIMING_CALIB.filter((p) => p.fabCalib !== false),
-  "f9",
+export const TIMING_DESIGN = smoothTemplate(timingTemplate(TIMING_CALIB, "d9"));
+export const TIMING_FAB = smoothTemplate(
+  timingTemplate(
+    TIMING_CALIB.filter((p) => p.fabCalib !== false),
+    "f9",
+  ),
 );
 
 // Firm-default fab share (%) when a project hasn't set one.
@@ -204,12 +219,55 @@ export function resampleTiming(tpl: number[], len: number): number[] {
 }
 
 // Interpolate a 9-point template at fractional position t ∈ [0,1] (no
-// renormalisation) — for drawing the continuous timing-shape curves.
+// renormalisation) — the continuous form of the template, used for drawing
+// the timing-shape curves and integrated by cumShare/resampleTiming.
+// Monotone cubic (Fritsch–Carlson) through the step centres: smooth (C1)
+// with no overshoot, so densities stay non-negative, no dips are invented
+// between steps, and the install crest stays the maximum. Piecewise-linear
+// interpolation gave every derived curve a visible corner at each knot.
+const _slopeCache = new Map<number[], number[]>();
+function knotSlopes(tpl: number[]): number[] {
+  const hit = _slopeCache.get(tpl);
+  if (hit) return hit;
+  const n = tpl.length;
+  const d: number[] = [];
+  for (let i = 0; i < n - 1; i++) d.push(tpl[i + 1] - tpl[i]);
+  const m = Array(n).fill(0);
+  m[0] = d[0];
+  m[n - 1] = d[n - 2];
+  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+  for (let i = 0; i < n - 1; i++) {
+    if (d[i] === 0) {
+      m[i] = 0;
+      m[i + 1] = 0;
+      continue;
+    }
+    const a = m[i] / d[i];
+    const b = m[i + 1] / d[i];
+    const s = a * a + b * b;
+    if (s > 9) {
+      const f = 3 / Math.sqrt(s);
+      m[i] = f * a * d[i];
+      m[i + 1] = f * b * d[i];
+    }
+  }
+  _slopeCache.set(tpl, m);
+  return m;
+}
 export function interpTiming(tpl: number[], t: number): number {
   let x = t * 9 - 0.5;
   x = Math.max(0, Math.min(8, x));
-  const i = Math.floor(x);
-  return tpl[i] + (tpl[Math.min(8, i + 1)] - tpl[i]) * (x - i);
+  const i = Math.min(7, Math.floor(x));
+  const u = x - i;
+  const m = knotSlopes(tpl);
+  const u2 = u * u;
+  const u3 = u2 * u;
+  return (
+    (2 * u3 - 3 * u2 + 1) * tpl[i] +
+    (u3 - 2 * u2 + u) * m[i] +
+    (-2 * u3 + 3 * u2) * tpl[i + 1] +
+    (u3 - u2) * m[i + 1]
+  );
 }
 
 // Cumulative share of a template's hours spent by fraction t of the span:
@@ -243,4 +301,29 @@ export function cumShare(tpl: number[], t: number): number {
 export function expectedBurn(t: number, split: number | null): number {
   const design = 1 - (split != null ? split : STD_SPLIT) / 100;
   return design * cumShare(TIMING_DESIGN, t) + (1 - design) * cumShare(TIMING_FAB, t);
+}
+
+// Instantaneous spend rate at fraction t of the schedule — the derivative
+// of expectedBurn (share of total labor per unit of schedule; integrates to
+// 1 over [0,1]). Consumers drawing the expected curve at finer-than-month
+// resolution sample this instead of differencing monthly buckets.
+const _areaCache = new Map<number[], number>();
+function tplArea(tpl: number[]): number {
+  let area = _areaCache.get(tpl);
+  if (area == null) {
+    area = 0;
+    for (let i = 0; i < CUM_STEPS; i++) {
+      area += (interpTiming(tpl, i / CUM_STEPS) + interpTiming(tpl, (i + 1) / CUM_STEPS)) / 2 / CUM_STEPS;
+    }
+    _areaCache.set(tpl, area);
+  }
+  return area;
+}
+export function expectedRate(t: number, split: number | null): number {
+  const design = 1 - (split != null ? split : STD_SPLIT) / 100;
+  const tc = Math.max(0, Math.min(1, t));
+  return (
+    (design * interpTiming(TIMING_DESIGN, tc)) / tplArea(TIMING_DESIGN) +
+    ((1 - design) * interpTiming(TIMING_FAB, tc)) / tplArea(TIMING_FAB)
+  );
 }
