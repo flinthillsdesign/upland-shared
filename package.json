@@ -1,7 +1,7 @@
 {
   "name": "@upland/shared",
-  "version": "0.2.0",
-  "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules — apps update deliberately by bumping their pin.",
+  "version": "0.3.0",
+  "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules \u2014 apps update deliberately by bumping their pin.",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +13,14 @@
     "./timing": {
       "types": "./dist/timing.d.ts",
       "default": "./dist/timing.js"
+    },
+    "./months": {
+      "types": "./dist/months.d.ts",
+      "default": "./dist/months.js"
+    },
+    "./palette": {
+      "types": "./dist/palette.d.ts",
+      "default": "./dist/palette.js"
     }
   },
   "files": [

@@ -195,6 +195,15 @@ export const STD_SPLIT = Math.round(
       TIMING_CALIB.length,
 );
 
+// Fixed closeout indicator: the month AFTER install, larger-tier projects
+// get this small extra share of total labor (design + fab). It stands in
+// for the real post-install wrap, which is deliberately outside the
+// calibration windows (measured: ~3% of window hours on average). ADDED on
+// top by consumers (scheduler projDemand, ODIN retro expected tail) — not
+// carved from the window's 100%.
+export const CLOSEOUT_DESIGN = 0.015;
+export const CLOSEOUT_FAB = 0.01;
+
 // ── Reads of the model ───────────────────────────────────────────────────
 
 const _resampleCache = new Map<string, number[]>();
