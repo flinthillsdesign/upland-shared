@@ -19,6 +19,18 @@ deliberate:
   Recalibrating: edit `TIMING_PROJECTS`, bump `TIMING_VERSION` and the
   package version, tag, then bump the pin in each app when it's ready.
 
+- **`@upland/shared/months`** — the absolute-month-key convention the
+  scheduler and ODIN share.
+- **`@upland/shared/palette`** — the design/fab team colors.
+- **`@upland/shared/dates`** — Upland days are Kansas days. `centralToday`,
+  `centralDay`, `centralDayPlus`, `formatCentral`, and `parseStamp` (a stored
+  SQLite timestamp is UTC, not local time). Safe in the browser.
+- **`@upland/shared/mail`** — `sendMail`, the one Postmark sender: links never
+  rewritten, opens never tracked, one From shape, never throws, and "not
+  configured" is not "sent". No dependency (fetch). Server only.
+- **`@upland/shared/db`** — `withRetry`: one retry for a dropped Turso
+  connection, every argument passed through. Server only.
+
 Planned next: `contracts` (cross-app API shapes: project registry, retro_v1,
 scheduler feed) and `voice` (the durable Upland style guide + prompt
 fragments for AI features).
