@@ -31,6 +31,12 @@ deliberate:
 - **`@upland/shared/db`** — `withRetry`: one retry for a dropped Turso
   connection, every argument passed through. Server only.
 
+- **`@upland/shared/ai`** — `createAi({ anthropic })`: the one wrapper around
+  the Anthropic client (effort default, forced-tool relax on Opus 5.5,
+  fallbacks on refusal, cut-off reporting, retries), plus `firstText`,
+  `wasTruncated`, `wasRefused`, `toolInput`. The app passes its own SDK
+  client in; no dependency here. Server only.
+
 Planned next: `contracts` (cross-app API shapes: project registry, retro_v1,
 scheduler feed) and `voice` (the durable Upland style guide + prompt
 fragments for AI features).

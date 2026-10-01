@@ -1,6 +1,6 @@
 {
   "name": "@upland/shared",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules — apps update deliberately by bumping their pin.",
   "private": true,
   "main": "dist/index.js",
@@ -33,6 +33,10 @@
     "./db": {
       "types": "./dist/db.d.ts",
       "default": "./dist/db.js"
+    },
+    "./ai": {
+      "types": "./dist/ai.d.ts",
+      "default": "./dist/ai.js"
     }
   },
   "files": [
