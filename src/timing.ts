@@ -20,7 +20,7 @@
 // Bumped whenever TIMING_PROJECTS (and therefore the derived templates)
 // changes. Stamped into ODIN retros so a frozen snapshot records which
 // model it was judged against.
-export const TIMING_VERSION = "2026-07-07.8proj-smooth";
+export const TIMING_VERSION = "2026-10-15.11proj-smooth";
 
 // ── Calibration projects (ODIN Toggl; method on the scheduler's Project
 // Shape page). window: sustained-work start → INSTALL month, so step 9 =
@@ -132,6 +132,42 @@ export const TIMING_PROJECTS: TimingProject[] = [
     d9: [33, 39, 65, 58, 47, 40, 35, 16, 11],
     f9: [0, 1, 6, 13, 25, 48, 64, 97, 105],
   },
+  // Added 2026-10-15 from ODIN's benchmark set (same method; windows end on
+  // the month the exhibit was delivered or installed, per the project's
+  // opening date in ODIN).
+  {
+    n: "Sea Turtle",
+    client: "Clearwater Marine Aquarium",
+    window: "2025-01..2026-01",
+    M: 13,
+    sf: 400,
+    budget: 200000,
+    note: "long runway, late build sprint (mobile classroom in an RV)",
+    d9: [34, 33, 42, 55, 37, 66, 75, 90, 88],
+    f9: [0, 0, 55, 63, 35, 24, 17, 224, 381],
+  },
+  {
+    n: "Briscoe-Garner",
+    client: "Briscoe-Garner Museum",
+    window: "2025-08..2026-02",
+    M: 7,
+    sf: 1470,
+    budget: 50000,
+    note: "small, design-led, fast build",
+    d9: [27, 17, 7, 4, 31, 98, 115, 89, 12],
+    f9: [0, 0, 0, 0, 0, 1, 49, 93, 115],
+  },
+  {
+    n: "Eisenhower",
+    client: "Eisenhower Presidential Library",
+    window: "2026-02..2026-06",
+    M: 5,
+    sf: 1920,
+    budget: 75000,
+    note: "compact, design-led, light build",
+    d9: [17, 21, 36, 39, 43, 41, 39, 20, 16],
+    f9: [0, 0, 0, 0, 0, 3, 4, 56, 69],
+  },
   {
     n: "McPherson",
     client: "McPherson Museum",
@@ -143,6 +179,17 @@ export const TIMING_PROJECTS: TimingProject[] = [
     calib: false,
     d9: [23, 27, 43, 43, 43, 32, 24, 16, 14],
     f9: [113, 106, 78, 91, 112, 95, 83, 104, 109],
+  },
+  {
+    n: "IEEE Microchips",
+    client: "IEEE History Center",
+    window: "2025-01..2025-09",
+    M: 9,
+    budget: 130382,
+    note: "fab-heavy traveling exhibit; fab crests at shipping, not install",
+    calib: false,
+    d9: [35, 31, 54, 56, 56, 87, 65, 14, 11],
+    f9: [88, 47, 80, 110, 236, 100, 209, 148, 4],
   },
 ];
 

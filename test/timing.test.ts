@@ -19,13 +19,13 @@ test("templates are 9 steps summing to 100", () => {
   }
 });
 
-test("derived values match the 2026-07-07 8-project calibration (smoothed)", () => {
+test("derived values match the 2026-10-15 11-project calibration (smoothed)", () => {
   // Guards against accidental data edits — update alongside TIMING_VERSION
-  // when deliberately recalibrating.
-  assert.equal(STD_SPLIT, 51);
-  assert.equal(TIMING_CALIB.length, 8);
-  assert.ok(Math.abs(TIMING_DESIGN[0] - 6.55) < 0.1);
-  assert.ok(Math.abs(TIMING_FAB[8] - 29.61) < 0.1);
+  // when deliberately recalibrating. (2026-07-07, 8 projects: 51 / 6.55 / 29.61.)
+  assert.equal(STD_SPLIT, 49);
+  assert.equal(TIMING_CALIB.length, 11);
+  assert.ok(Math.abs(TIMING_DESIGN[0] - 6.51) < 0.1);
+  assert.ok(Math.abs(TIMING_FAB[8] - 33.59) < 0.1);
 });
 
 test("fab crests at the install month", () => {
