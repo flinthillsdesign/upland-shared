@@ -49,6 +49,13 @@ Who uses what besides timing (2026-10-01):
 | upland-budgets | – | – | yes | – | v0.4.0 |
 | upland-strategy | – | yes | yes | – | v0.4.0 |
 
+`fresh` (v0.7.0, 2026-10-19) is browser-only and goes into every app's pages
+(scheduler: generated `public/js/fresh.js` global; ODIN: bundled
+`public/js/fresh.ts`; agreements, proposals, graphics: imported in
+`public/js/api.ts`). Each app's build also writes `public/build.json`
+(gitignored) — the stamp `watchFresh` compares to notice a deploy. Budgets
+(Anthony's React app) is not wired; it stands apart by rule.
+
 `dates`, `mail`, `db` (v0.4.0) and `ai` (v0.5.0) are plain server modules — import the
 subpath. `dates` is also safe to bundle into a browser file. Import subpaths,
 never the package root, from browser code: the root pulls in `mail`, which

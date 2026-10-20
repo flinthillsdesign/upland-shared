@@ -37,6 +37,17 @@ deliberate:
   `wasTruncated`, `wasRefused`, `toolInput`. The app passes its own SDK
   client in; no dependency here. Server only.
 
+- **`@upland/shared/fresh`** — `watchFresh`: a page left open comes back
+  current. On return to the foreground (and every few minutes while
+  visible) it compares the running build to `/build.json` and, when the
+  page hands over a `stamp`, the data's updated-at; a changed build reloads
+  the page, a moved stamp calls the page's `refresh` (or reloads), a page
+  with no stamp reloads after being hidden ten minutes. Never while the
+  page is dirty — then the reload button lights up instead. The button
+  shows only in installed-app windows. Each app's build writes
+  `public/build.json` (`{ built_at, ref }`). Browser only; the module is
+  inert without a `document`.
+
 Planned next: `contracts` (cross-app API shapes: project registry, retro_v1,
 scheduler feed) and `voice` (the durable Upland style guide + prompt
 fragments for AI features).
@@ -47,6 +58,11 @@ fragments for AI features).
 |---|---|---|
 | upland-scheduler | `lib/coaching.ts` require | `public/js/timing.js` generated at build (globals) |
 | upland-odin | `lib/retro.ts` require | `public/js/timing.ts` re-export, bundled at build |
+
+`fresh` (v0.7.0) rides into every browser the same way: the scheduler
+generates `public/js/fresh.js` (a global `watchFresh`, auto-started);
+ODIN bundles `public/js/fresh.ts`; agreements, proposals and graphics import
+it from their `public/js/api.ts`, which every page loads.
 
 Frontends can't import node_modules at runtime (both apps serve unbundled
 ES modules / classic scripts), so each app's `build.js` bakes this package
