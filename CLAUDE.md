@@ -56,6 +56,10 @@ Who uses what besides timing (2026-10-01):
 (gitignored) — the stamp `watchFresh` compares to notice a deploy. Budgets
 (Anthony's React app) is not wired; it stands apart by rule.
 
+`avatar` (v0.8.0, 2026-10-30) is the one initials-or-photo renderer, browser
+or server; ODIN (Users page, person page) and Graphics (the bar) use it, and
+ODIN fills the photos from Basecamp (`lib/avatars.ts`).
+
 `dates`, `mail`, `db` (v0.4.0) and `ai` (v0.5.0) are plain server modules — import the
 subpath. `dates` is also safe to bundle into a browser file. Import subpaths,
 never the package root, from browser code: the root pulls in `mail`, which

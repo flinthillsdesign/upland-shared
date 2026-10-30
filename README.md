@@ -48,6 +48,14 @@ deliberate:
   `public/build.json` (`{ built_at, ref }`). Browser only; the module is
   inert without a `document`.
 
+- **`@upland/shared/avatar`** — one face per person, everywhere. `avatarFor`
+  (the photo, or initials on a color that hashes the person's id) and
+  `avatarHtml` (the one renderer; adds its base styles once per page, ahead
+  of the app's own). The photo is Basecamp's: ODIN copies it into the auth
+  DB's `user_avatars` (a 96px data URI) nightly and on sign-in, and every
+  app reads it beside the name at login. Nobody picks a picture in an
+  Upland app; change it in Basecamp. Browser or server.
+
 Planned next: `contracts` (cross-app API shapes: project registry, retro_v1,
 scheduler feed) and `voice` (the durable Upland style guide + prompt
 fragments for AI features).
