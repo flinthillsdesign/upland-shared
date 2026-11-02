@@ -1,7 +1,7 @@
 {
   "name": "@upland/shared",
-  "version": "0.9.0",
-  "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules \u2014 apps update deliberately by bumping their pin.",
+  "version": "0.9.1",
+  "description": "Shared modules for the Upland Exhibits app suite. One repo, one tag-pinned package, subpath modules — apps update deliberately by bumping their pin.",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

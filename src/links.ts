@@ -26,7 +26,7 @@
 
 import { randomBytes } from "node:crypto";
 
-export const LINKS_VERSION = "1.0.0";
+export const LINKS_VERSION = "1.1.0";
 
 export interface LinkTerms {
   days: number;
@@ -172,6 +172,7 @@ export interface SignInMailInput {
   invitedBy?: string; // a person's name: "Joel added you to …"
   terms?: LinkTerms;
   openLabel?: string; // the button: default "Open the project"
+  sees?: string; // what a forwarded link shows a colleague: default "this" ("these batches")
 }
 
 export interface MailWords {
@@ -183,9 +184,9 @@ export interface MailWords {
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
 const days = (n: number) => (n === 10 ? "ten" : n === 30 ? "thirty" : n === 90 ? "90" : String(n)) + " days";
 
-export function linkFoot(terms: LinkTerms): string {
+export function linkFoot(terms: LinkTerms, sees = "this"): string {
   return terms.days >= 90
-    ? `The link signs you in and is yours to keep: it works as often as you like for ${days(terms.days)}, and you can forward it to a colleague who should see this. After that, ask for a new one on the sign-in page.`
+    ? `The link signs you in and is yours to keep: it works as often as you like for ${days(terms.days)}, and you can forward it to a colleague who should see ${sees}. After that, ask for a new one on the sign-in page.`
     : `The link signs you in and stays good for ${days(terms.days)}. After that, one click on it asks for a fresh one.`;
 }
 
@@ -193,7 +194,7 @@ export function signInMail(o: SignInMailInput): MailWords {
   const terms = o.terms ?? CLIENT_LINK;
   const intro = o.invitedBy ? `${o.invitedBy} added you to ${o.what}.` : `Here is your sign-in link for ${o.what}.`;
   const label = o.openLabel ?? "Open the project";
-  const foot = linkFoot(terms);
+  const foot = linkFoot(terms, o.sees);
   const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#23221f;max-width:560px">
 <p style="margin:0 0 18px">${esc(intro)}</p>
 <p style="margin:0 0 22px"><a href="${esc(o.url)}" style="display:inline-block;padding:11px 20px;background:#23221f;color:#fff;text-decoration:none;border-radius:4px;font-weight:600">${esc(label)}</a></p>
