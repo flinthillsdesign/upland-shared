@@ -48,6 +48,11 @@ deliberate:
   `public/build.json` (`{ built_at, ref }`). Browser only; the module is
   inert without a `document`.
 
+- **`@upland/shared/links`** — the one emailed sign-in door for outside people
+  (clients, printers): terms (`CLIENT_LINK` 10 days, `PROJECT_LINK` 30,
+  `PRINTER_LINK` 90), `linkStore(db)` over `member_links`/`member_sessions`,
+  `ensureLinkSchema`, `linkUrl`, `maskEmail`, `safePath`, and `signInMail`
+  (the mail's words). Server only; the app keeps its people tables and scope.
 - **`@upland/shared/avatar`** — one face per person, everywhere. `avatarFor`
   (the photo, or initials on a color that hashes the person's id) and
   `avatarHtml` (the one renderer; adds its base styles once per page, ahead

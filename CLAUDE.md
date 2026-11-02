@@ -56,6 +56,14 @@ Who uses what besides timing (2026-10-01):
 (gitignored) — the stamp `watchFresh` compares to notice a deploy. Budgets
 (Anthony's React app) is not wired; it stands apart by rule.
 
+`links` (v0.9.0, 2026-11-02) is the one emailed sign-in door for outside
+people: the terms (`CLIENT_LINK` 10 days for proofs, `PROJECT_LINK` 30 for an
+object list, `PRINTER_LINK` 90), the `member_links`/`member_sessions` tables
+and their queries (`linkStore(db)`, Graphics' shape), tokens, the link URL,
+the one-click fresh link, and the mail's words (`signInMail`). Objects
+consumes it; Graphics still has its own copy in `lib/db.ts`/`lib/email.ts`
+(same tables) and should adopt this one — that is the open one-home item.
+
 `avatar` (v0.8.0, 2026-10-30) is the one initials-or-photo renderer, browser
 or server; ODIN (Users page, person page) and Graphics (the bar) use it, and
 ODIN fills the photos from Basecamp (`lib/avatars.ts`).
