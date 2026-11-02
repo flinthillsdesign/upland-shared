@@ -45,7 +45,7 @@ Who uses what besides timing (2026-10-01):
 | upland-scheduler | yes | yes | – | yes | v0.5.0 |
 | upland-agreements | yes | yes | – | yes | v0.5.0 |
 | upland-proposals | – | yes | – | – | v0.4.0 |
-| upland-graphics | yes | yes | – | – | v0.9.1 |
+| upland-graphics | yes | yes | – | – | v0.9.2 |
 | upland-budgets | – | – | yes | – | v0.4.0 |
 | upland-strategy | – | yes | yes | – | v0.4.0 |
 
@@ -61,9 +61,8 @@ people: the terms (`CLIENT_LINK` 10 days for proofs, `PROJECT_LINK` 30 for an
 object list, `PRINTER_LINK` 90), the `member_links`/`member_sessions` tables
 and their queries (`linkStore(db)`, Graphics' shape), tokens, the link URL,
 the one-click fresh link, and the mail's words (`signInMail`, `linkFoot`;
-`sees` names what a forwarded link shows). Objects (v0.9.0) and Graphics
-(v0.9.1, `lib/db.ts` wraps `linkStore`, `lib/email.ts` calls `signInMail`)
-consume it.
+`sees` names what a forwarded link shows). Objects and Graphics (`lib/db.ts`
+wraps `linkStore`, `lib/email.ts` calls `signInMail`) consume it.
 
 `avatar` (v0.8.0, 2026-10-30) is the one initials-or-photo renderer, browser
 or server; ODIN (Users page, person page) and Graphics (the bar) use it, and
