@@ -75,6 +75,8 @@ test("the mail says who, what, how long", () => {
   assert.ok(m.html.includes('href="https://o.example/?t=x"'));
   assert.match(linkFoot(PRINTER_LINK), /forward it to a colleague/);
   assert.match(linkFoot(CLIENT_LINK), /ten days/);
+  assert.match(signInMail({ app: "Graphics", url: "https://x/?t=a", what: "Upland's print files for Prairie Print Co." }).text, /Prairie Print Co\.\n/);
+  assert.match(signInMail({ app: "Graphics", url: "https://x/?t=a", what: "Ireland", invitedBy: "Joel" }).text, /^Joel added you to Ireland\.\n/);
   assert.equal(linkFoot(PRINTER_LINK, "these batches"), "The link signs you in and is yours to keep: it works as often as you like for 90 days, and you can forward it to a colleague who should see these batches. After that, ask for a new one on the sign-in page.");
   const plain = signInMail({ app: "Graphics", url: "u", what: "Volga" });
   assert.match(plain.text, /^Here is your sign-in link for Volga\./);

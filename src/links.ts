@@ -26,7 +26,7 @@
 
 import { randomBytes } from "node:crypto";
 
-export const LINKS_VERSION = "1.1.0";
+export const LINKS_VERSION = "1.1.1";
 
 export interface LinkTerms {
   days: number;
@@ -192,7 +192,9 @@ export function linkFoot(terms: LinkTerms, sees = "this"): string {
 
 export function signInMail(o: SignInMailInput): MailWords {
   const terms = o.terms ?? CLIENT_LINK;
-  const intro = o.invitedBy ? `${o.invitedBy} added you to ${o.what}.` : `Here is your sign-in link for ${o.what}.`;
+  // A name that ends in its own period ("Prairie Print Co.") ends the sentence.
+  const end = /[.!?]$/.test(o.what) ? "" : ".";
+  const intro = o.invitedBy ? `${o.invitedBy} added you to ${o.what}${end}` : `Here is your sign-in link for ${o.what}${end}`;
   const label = o.openLabel ?? "Open the project";
   const foot = linkFoot(terms, o.sees);
   const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#23221f;max-width:560px">
